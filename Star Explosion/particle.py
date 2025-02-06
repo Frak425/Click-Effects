@@ -78,4 +78,4 @@ class Particle:
         self.rotated_image_with_alpha.set_alpha(self.alpha)
 
     def draw_particle(self, location_i):
-        self.screen.blit(self.rotated_image_with_alpha, (location_i[0] + self.x, location_i[1] + self.y - 15))
+        self.screen.blit(self.rotated_image_with_alpha, (location_i[0] + self.x, location_i[1] + self.y - 5))
