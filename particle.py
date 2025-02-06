@@ -1,10 +1,11 @@
 import pygame
 from pygame.surface import *
 import math
+import pytweening
 import random
 
 class Particle:
-    def __init__(self, screen: Surface, image: Surface, a_bounds: tuple, v_bounds: tuple, p_y_bounds: tuple, p_x_bounds: tuple, r_a_bounds: tuple, r_v_bounds: tuple, r_bounds: tuple, opacity_type: str):
+    def __init__(self, screen: Surface, image: Surface, a_bounds: tuple, v_bounds: tuple, p_y_bounds: tuple, p_x_bounds: tuple, r_a_bounds: tuple, r_v_bounds: tuple, r_bounds: tuple, theta_bounds: tuple, opacity_type: str):
         self.image = image
         self.screen = screen
 
@@ -29,8 +30,9 @@ class Particle:
         self.r_range = r_bounds[1] - r_bounds[0]
         self.r = random.random() * self.r_range + r_bounds[0]
         #theta (determines velocity)
-        self.theta = random.random() * 90 + 45
-        print(self.theta)
+        self.theta_bounds = theta_bounds
+        self.theta_range = theta_bounds[1] - theta_bounds[0]
+        self.theta = math.radians(random.random() * self.theta_range + (180 - self.theta_range) / 2)
 
         
         #translational acceleration (y only)
@@ -41,8 +43,8 @@ class Particle:
         self.v_bounds = v_bounds
         self.v_range = self.v_bounds[1] - self.v_bounds[0]
         self.v = random.random() * self.v_range + self.v_bounds[0]
-        self.v_x = self.v * math.cos(self.r)
-        self.v_y = -self.v * math.sin(self.r)
+        self.v_x = (self.v * math.cos(self.r)) / 2
+        self.v_y = -abs(-self.v * math.sin(self.r))
         #translational y position
         self.y_bounds = p_y_bounds
         self.y_range = p_y_bounds[1] - p_y_bounds[0]
@@ -51,11 +53,10 @@ class Particle:
         self.x_bounds = p_x_bounds
         self.x_range = p_x_bounds[1] - p_x_bounds[0]
         self.x = random.random() * self.x_range + self.x_bounds[0]
-        print(self.v_y)
 
         self.opacity_type = opacity_type
 
-    def update_info(self, dt):
+    def update_info(self, dt, tween):
         #update tranformational info
         self.y += self.v_y
         self.x += self.v_x
@@ -68,7 +69,13 @@ class Particle:
         self.r_v += self.r_a
         #print((self.a, self.v, self.v_x, self.v_y, self.x, self.y))
         #update image to match rotation
-        pygame.transform.rotate(self.image, dr)
+        self.rotated_image = pygame.transform.rotate(self.image, dr)
+
+        #update opacity
+        fade_factor = pytweening.easeInOutQuart(tween)
+        self.alpha = max(0, int(255 * (1 - fade_factor)))
+        self.rotated_image_with_alpha = self.rotated_image.copy()
+        self.rotated_image_with_alpha.set_alpha(self.alpha)
 
     def draw_particle(self, location_i):
-        self.screen.blit(self.image, (location_i[0] + self.x, location_i[1] + self.y))
+        self.screen.blit(self.rotated_image_with_alpha, (location_i[0] + self.x, location_i[1] + self.y - 15))

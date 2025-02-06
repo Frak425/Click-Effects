@@ -14,6 +14,7 @@ import os
     "r_a_bounds"
     "r_v_bounds"
     "r_bounds"
+    "theta_bounds"
     "opacity_type"
     "duration"
     "num_particles"
@@ -49,6 +50,7 @@ class StarExplosion:
         self.r_a_bounds = props["r_a_bounds"]
         self.r_v_bounds = props["r_v_bounds"]
         self.r_bounds = props["r_bounds"]
+        self.theta_bounds = props["theta_bounds"]
         self.opacity_type = props["opacity_type"]
 
         self.create_particles()
@@ -58,17 +60,17 @@ class StarExplosion:
             if name == "circle":
                 circle_img = pygame.surface.Surface((self.particle_size, self.particle_size))
                 pygame.draw.circle(circle_img, (100, 100, 100, 255), (self.particle_size / 2, self.particle_size / 2), self.particle_size * .4, 1)
-                self.particle_objects.append(Particle(self.screen, circle_img, self.a_bounds, self.v_bounds, self.p_y_bounds, self.p_x_bounds, self.r_a_bounds, self.r_v_bounds, self.r_bounds, self.opacity_type))
+                self.particle_objects.append(Particle(self.screen, circle_img, self.a_bounds, self.v_bounds, self.p_y_bounds, self.p_x_bounds, self.r_a_bounds, self.r_v_bounds, self.r_bounds, self.theta_bounds, self.opacity_type))
             elif name == "square":
                 square_img = pygame.surface.Surface((self.particle_size, self.particle_size), pygame.SRCALPHA)
                 pygame.draw.rect(square_img, (100, 100, 100, 0), [self.particle_size * .1, self.particle_size * .1, self.particle_size * .8, self.particle_size * .8], 1)
-                self.particle_objects.append(Particle(self.screen, square_img, self.a_bounds, self.v_bounds, self.p_y_bounds, self.p_x_bounds, self.r_a_bounds, self.r_v_bounds, self.r_bounds, self.opacity_type))
+                self.particle_objects.append(Particle(self.screen, square_img, self.a_bounds, self.v_bounds, self.p_y_bounds, self.p_x_bounds, self.r_a_bounds, self.r_v_bounds, self.r_bounds, self.theta_bounds, self.opacity_type))
 
             elif name == "rotated_square":
                 rotated_square_img = pygame.surface.Surface((self.particle_size, self.particle_size))
                 pygame.draw.rect(rotated_square_img, (100, 100, 100, 255), [self.particle_size * .1, self.particle_size * .1, self.particle_size * .8, self.particle_size * .8], 3)
                 pygame.transform.rotate(rotated_square_img, 45)
-                self.particle_objects.append(Particle(self.screen, rotated_square_img, self.a_bounds, self.v_bounds, self.p_y_bounds, self.p_x_bounds, self.r_a_bounds, self.r_v_bounds, self.r_bounds, self.opacity_type))
+                self.particle_objects.append(Particle(self.screen, rotated_square_img, self.a_bounds, self.v_bounds, self.p_y_bounds, self.p_x_bounds, self.r_a_bounds, self.r_v_bounds, self.r_bounds, self.theta_bounds, self.opacity_type))
             else:
                 print("Error in particle_names. Name not found")
 
@@ -80,9 +82,10 @@ class StarExplosion:
         
         dt = new_time - self.time_elapsed
         self.time_elapsed = new_time - self.starting_time
+        t = self.time_elapsed / self.duration
         #self.time = self.current_time
         for particle in self.particle_objects:
-            particle.update_info(dt)
+            particle.update_info(dt, t)
 
         self.draw_particles()
 

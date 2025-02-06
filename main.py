@@ -14,15 +14,16 @@ clock = pygame.time.Clock()
 particles = []
 particle_props = {
     "particle_size": 10,
-    "a_bounds": (-.5, -.3), #same
-    "v_bounds": (2, 3),
+    "a_bounds": (-.2, -.1), #same
+    "v_bounds": (3, 3.1),
     "p_y_bounds": (-10, 10),
     "p_x_bounds": (-10, 10),
-    "r_a_bounds": (-1, -.5),
-    "r_v_bounds": (1, 2),
+    "r_a_bounds": (-1, 1),
+    "r_v_bounds": (.75, 1.75),
     "r_bounds": (0, 180),
+    "theta_bounds": (80, 100),
     "opacity_type": "linear",
-    "duration": 1,
+    "duration": 1.2,
     "num_particles": 10
 }
 
