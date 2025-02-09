@@ -1,6 +1,6 @@
 import pygame
-from star_explosion import StarExplosion
-from projectile import Projectile
+from explosion.star_explosion import StarExplosion
+from projectile.projectile import Projectile
 
 pygame.init()
 

@@ -1,6 +1,6 @@
 import pygame
 import math
-import pytweening as tween
+import pytweening
 import random
 
 class Particle:
@@ -81,7 +81,7 @@ class Particle:
         self.rotated_image = pygame.transform.rotate(self.image, dr)
 
         #update opacity
-        fade_factor = tween.easeInOutQuart(tween)
+        fade_factor = pytweening.easeInOutQuart(tween)
         self.alpha = max(0, int(255 * (1 - fade_factor)))
         self.rotated_image_with_alpha = self.rotated_image.copy()
         self.rotated_image_with_alpha.set_alpha(self.alpha)
