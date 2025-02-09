@@ -1,7 +1,6 @@
 import pygame
-import inspect
 from star_explosion import StarExplosion
-from particle import Particle
+from projectile import Projectile
 
 pygame.init()
 
